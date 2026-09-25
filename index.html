@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BADUYLOCAL | Digital Cultural Enterprise Platform</title>
+    <meta name="description" content="Preserving Heritage, Empowering Community. Platform digital yang menghadirkan produk budaya masyarakat Baduy.">
+    
+    <!-- Google Fonts: Playfair Display for premium headers, Inter for readable body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: '#355834',
+                        earth: '#6B4226',
+                        beige: '#E8DCC5',
+                        sand: '#D8C3A5',
+                        offwhite: '#FAF8F2',
+                        charcoal: '#222222'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    backgroundImage: {
+                        'texture-pattern': "url('data:image/svg+xml,%3Csvg width=\\'20\\' height=\\'20\\' viewBox=\\'0 0 20 20\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'%23d8c3a5\\' fill-opacity=\\'0.1\\' fill-rule=\\'evenodd\\'%3E%3Ccircle cx=\\'3\\' cy=\\'3\\' r=\\'3\\'/%3E%3Ccircle cx=\\'13\\' cy=\\'13\\' r=\\'3\\'/%3E%3C/g%3E%3C/svg%3E')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F2; /* offwhite */
+            color: #222222; /* charcoal */
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #E8DCC5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #355834;
+            border-radius: 4px;
+        }
+
+        /* Hero Overlay Gradient */
+        .hero-gradient {
+            background: linear-gradient(to bottom, rgba(34,34,34,0.3) 0%, rgba(34,34,34,0.8) 100%);
+        }
+
+        /* Museum Style Divider */
+        .museum-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #6B4226, transparent);
+            margin: 2rem 0;
+        }
+
+        /* Hide modal by default */
+        #product-modal {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #product-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased bg-texture-pattern">
+
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 px-6 md:px-12">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="#" class="text-2xl font-serif font-bold text-white tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-leaf text-forest"></i> BADUYLOCAL
+        </a>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex gap-8 text-sm font-medium text-white tracking-wide">
+            <a href="#about" class="hover:text-sand transition-colors">About</a>
+            <a href="#how-it-works" class="hover:text-sand transition-colors">Workflow</a>
+            <a href="#cultural-hub" class="hover:text-sand transition-colors">Culture</a>
+            <a href="#catalog" class="hover:text-sand transition-colors">Products</a>
+            <a href="#impact" class="hover:text-sand transition-colors">Impact</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-forest shadow-lg flex flex-col p-6 gap-4 text-white">
+        <a href="#about" class="mobile-link text-lg border-b border-white/20 pb-2">About</a>
+        <a href="#how-it-works" class="mobile-link text-lg border-b border-white/20 pb-2">Workflow</a>
+        <a href="#cultural-hub" class="mobile-link text-lg border-b border-white/20 pb-2">Culture</a>
+        <a href="#catalog" class="mobile-link text-lg border-b border-white/20 pb-2">Products</a>
+        <a href="#impact" class="mobile-link text-lg">Impact</a>
+    </div>
+</nav>
+
+<!-- 1. HERO SECTION -->
+<section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+    <!-- Background Image (Nature/Culture placeholder) -->
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1542273917363-3b1817f69a5d?q=80&w=2074&auto=format&fit=crop" alt="Baduy Nature Background" class="w-full h-full object-cover object-center scale-105 transform transition-transform duration-[20s] hover:scale-100">
+        <div class="absolute inset-0 hero-gradient"></div>
+    </div>
+
+    <div class="relative z-10 text-center px-6 max-w-4xl mx-auto flex flex-col items-center">
+        <span class="text-sand text-sm uppercase tracking-[0.3em] mb-4 block fade-in-up">From Local Heritage to Global Opportunity</span>
+        <h1 class="text-5xl md:text-7xl font-serif font-bold text-offwhite mb-6 leading-tight fade-in-up" style="transition-delay: 100ms;">
+            Preserving Heritage, <br> <span class="italic font-light text-sand">Empowering Community</span>
+        </h1>
+        <p class="text-lg md:text-xl text-beige mb-10 max-w-2xl font-light fade-in-up" style="transition-delay: 200ms;">
+            Platform digital yang menghadirkan produk budaya masyarakat Baduy melalui kolaborasi, kurasi, dan inovasi teknologi.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 fade-in-up" style="transition-delay: 300ms;">
+            <a href="#catalog" class="bg-forest hover:bg-earth text-offwhite px-8 py-3 rounded-none border border-forest transition-all duration-300 tracking-wide font-medium">Explore Products</a>
+            <a href="#cultural-hub" class="bg-transparent hover:bg-white/10 text-offwhite px-8 py-3 rounded-none border border-offwhite transition-all duration-300 tracking-wide font-medium">Discover Culture</a>
+        </div>
+    </div>
+    
+    <!-- Floating Element -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-offwhite floating z-10 opacity-70">
+        <i class="fa-solid fa-chevron-down text-2xl"></i>
+    </div>
+</section>
+
+<!-- 2. ABOUT BADUYLOCAL -->
+<section id="about" class="py-24 bg-offwhite px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16 fade-in-up">
+            <h2 class="text-3xl md:text-4xl font-serif text-charcoal font-bold mb-4">Connecting Heritage with Digital Opportunity</h2>
+            <div class="w-24 h-1 bg-forest mx-auto mb-6"></div>
+            <p class="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">
+                BADUYLOCAL bekerja sama dengan pengrajin masyarakat Baduy untuk mengkurasi, memasarkan, dan mendistribusikan produk budaya melalui platform digital yang menjaga nilai-nilai autentik kearifan lokal.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Card 1 -->
+            <div class="bg-beige p-8 text-center border-b-4 border-forest hover:-translate-y-2 transition-transform duration-300 fade-in-up shadow-sm">
+                <div class="w-16 h-16 bg-forest text-sand rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                    <i class="fa-solid fa-handshake"></i>
+                </div>
+                <h3 class="text-xl font-serif text-earth font-bold mb-3">Partnership</h3>
+                <p class="text-charcoal/80 text-sm leading-relaxed">Kerja sama langsung dan adil dengan komunitas pengrajin asli Baduy.</p>
+            </div>
+            <!-- Card 2 -->
+            <div class="bg-beige p-8 text-center border-b-4 border-earth hover:-translate-y-2 transition-transform duration-300 fade-in-up shadow-sm" style="transition-delay: 100ms;">
+                <div class="w-16 h-16 bg-earth text-sand rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <h3 class="text-xl font-serif text-earth font-bold mb-3">Product Curation</h3>
+                <p class="text-charcoal/80 text-sm leading-relaxed">Seleksi ketat produk berdasarkan standar kualitas dan nilai autentik budaya.</p>
+            </div>
+            <!-- Card 3 -->
+            <div class="bg-beige p-8 text-center border-b-4 border-forest hover:-translate-y-2 transition-transform duration-300 fade-in-up shadow-sm" style="transition-delay: 200ms;">
+                <div class="w-16 h-16 bg-forest text-sand rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h3 class="text-xl font-serif text-earth font-bold mb-3">Cultural Storytelling</h3>
+                <p class="text-charcoal/80 text-sm leading-relaxed">Setiap produk membawa cerita, makna, dan filosofi kehidupan masyarakat adat.</p>
+            </div>
+            <!-- Card 4 -->
+            <div class="bg-beige p-8 text-center border-b-4 border-earth hover:-translate-y-2 transition-transform duration-300 fade-in-up shadow-sm" style="transition-delay: 300ms;">
+                <div class="w-16 h-16 bg-earth text-sand rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <h3 class="text-xl font-serif text-earth font-bold mb-3">Sustainable Distribution</h3>
+                <p class="text-charcoal/80 text-sm leading-relaxed">Pengelolaan distribusi profesional untuk memperluas jangkauan pasar secara etis.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. HOW BADUYLOCAL WORKS (FLOW SYSTEM) -->
+<section id="how-it-works" class="py-24 bg-sand/30 px-6 overflow-hidden relative">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16 fade-in-up">
+            <h2 class="text-3xl md:text-4xl font-serif text-charcoal font-bold mb-4">Ecosystem Flow</h2>
+            <div class="w-24 h-1 bg-earth mx-auto"></div>
+            <p class="mt-4 text-gray-700">Model kolaborasi yang menghubungkan pengrajin dengan dunia luar.</p>
+        </div>
+
+        <!-- Timeline Container (Horizontal on MD, Vertical on Mobile) -->
+        <div class="relative flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar">
+            
+            <!-- Connection Line (Desktop) -->
+            <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-earth/30 -z-10"></div>
+            <!-- Connection Line (Mobile) -->
+            <div class="md:hidden absolute top-0 left-1/2 -ml-0.5 w-1 h-full bg-earth/30 -z-10"></div>
+
+            <!-- Step 1 -->
+            <div class="flex flex-col items-center min-w-[200px] snap-center fade-in-up relative bg-offwhite p-4 border border-earth/20 z-10 shadow-sm">
+                <div class="w-12 h-12 bg-forest text-white rounded-full flex items-center justify-center mb-3 text-xl"><i class="fa-solid fa-people-group"></i></div>
+                <h4 class="font-bold text-earth text-center">Pengrajin Baduy</h4>
+                <p class="text-xs text-center mt-2">Kemitraan lokal</p>
+            </div>
+
+            <i class="fa-solid fa-arrow-right text-earth hidden md:block opacity-50"></i>
+            <i class="fa-solid fa-arrow-down text-earth md:hidden my-2 opacity-50"></i>
+
+            <!-- Step 2 -->
+            <div class="flex flex-col items-center min-w-[200px] snap-center fade-in-up relative bg-offwhite p-4 border border-earth/20 z-10 shadow-sm" style="transition-delay: 100ms;">
+                <div class="w-12 h-12 bg-earth text-white rounded-full flex items-center justify-center mb-3 text-xl"><i class="fa-solid fa-check-double"></i></div>
+                <h4 class="font-bold text-earth text-center">Kurasi & Verifikasi</h4>
+                <p class="text-xs text-center mt-2">Tim BADUYLOCAL</p>
+            </div>
+
+            <i class="fa-solid fa-arrow-right text-earth hidden md:block opacity-50"></i>
+            <i class="fa-solid fa-arrow-down text-earth md:hidden my-2 opacity-50"></i>
+
+            <!-- Step 3 -->
+            <div class="flex flex-col items-center min-w-[200px] snap-center fade-in-up relative bg-offwhite p-4 border border-earth/20 z-10 shadow-sm" style="transition-delay: 200ms;">
+                <div class="w-12 h-12 bg-forest text-white rounded-full flex items-center justify-center mb-3 text-xl"><i class="fa-solid fa-laptop-code"></i></div>
+                <h4 class="font-bold text-earth text-center">Katalog Digital</h4>
+                <p class="text-xs text-center mt-2">Marketing & Storytelling</p>
+            </div>
+
+            <i class="fa-solid fa-arrow-right text-earth hidden md:block opacity-50"></i>
+            <i class="fa-solid fa-arrow-down text-earth md:hidden my-2 opacity-50"></i>
+            
+            <!-- Step 4 -->
+            <div class="flex flex-col items-center min-w-[200px] snap-center fade-in-up relative bg-offwhite p-4 border border-earth/20 z-10 shadow-sm" style="transition-delay: 300ms;">
+                <div class="w-12 h-12 bg-earth text-white rounded-full flex items-center justify-center mb-3 text-xl"><i class="fa-solid fa-box-open"></i></div>
+                <h4 class="font-bold text-earth text-center">Distribusi Pesanan</h4>
+                <p class="text-xs text-center mt-2">Pengambilan & Pengiriman</p>
+            </div>
+
+            <i class="fa-solid fa-arrow-right text-earth hidden md:block opacity-50"></i>
+            <i class="fa-solid fa-arrow-down text-earth md:hidden my-2 opacity-50"></i>
+
+            <!-- Step 5 -->
+            <div class="flex flex-col items-center min-w-[200px] snap-center fade-in-up relative bg-offwhite p-4 border border-earth/20 z-10 shadow-sm" style="transition-delay: 400ms;">
+                <div class="w-12 h-12 bg-forest text-white rounded-full flex items-center justify-center mb-3 text-xl"><i class="fa-solid fa-seedling"></i></div>
+                <h4 class="font-bold text-earth text-center">Pemberdayaan</h4>
+                <p class="text-xs text-center mt-2">Ekonomi Masyarakat</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- 4. CULTURAL HUB -->
+<section id="cultural-hub" class="py-24 bg-charcoal text-offwhite px-6 border-t-8 border-earth">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="fade-in-up">
+            <span class="text-sand tracking-widest text-sm uppercase font-semibold">Digital Museum</span>
+            <h2 class="text-4xl md:text-5xl font-serif font-bold mt-2 mb-6 text-white">Mengenal Baduy: <br> Harmoni & Tradisi</h2>
+            <div class="museum-divider"></div>
+            
+            <div class="space-y-6 text-beige font-light">
+                <div>
+                    <h3 class="text-xl font-serif text-sand mb-2"><i class="fa-solid fa-landmark text-sm mr-2"></i> Sejarah & Nilai</h3>
+                    <p class="leading-relaxed">Masyarakat Baduy memegang teguh pedoman "Lojor teu meunang dipotong, pondok teu meunang disambung" (Panjang tidak boleh dipotong, pendek tidak boleh disambung), yang berarti kepatuhan absolut pada hukum alam dan tradisi.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-serif text-sand mb-2"><i class="fa-solid fa-leaf text-sm mr-2"></i> Hubungan Alam</h3>
+                    <p class="leading-relaxed">Alam bukanlah sumber eksploitasi, melainkan entitas hidup yang harus dijaga harmoni dan kelestariannya. Segala proses produksi menggunakan bahan ramah lingkungan.</p>
+                </div>
+            </div>
+            
+            <button class="mt-10 border border-sand text-sand hover:bg-sand hover:text-charcoal transition px-6 py-2">Pelajari Lebih Lanjut</button>
+        </div>
+        
+        <div class="relative fade-in-up" style="transition-delay: 200ms;">
+            <!-- Placeholder image resembling a cultural gallery -->
+            <img src="https://images.unsplash.com/photo-1596496627063-8c4d2fb2d354?q=80&w=2070&auto=format&fit=crop" alt="Tradisi Anyaman Baduy" class="w-full h-[500px] object-cover grayscale hover:grayscale-0 transition duration-700 border-4 border-earth/30">
+            <div class="absolute -bottom-6 -left-6 bg-forest p-6 text-sand max-w-xs border-l-4 border-earth shadow-xl">
+                <p class="font-serif italic">"Kearifan lokal yang tidak hanya bertahan, tetapi hidup dalam setiap helaian benang dan serat bambu."</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. PRODUCT CATALOG -->
+<section id="catalog" class="py-24 bg-offwhite px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-12 fade-in-up">
+            <h2 class="text-3xl md:text-4xl font-serif text-charcoal font-bold mb-4">Katalog Kurasi BADUYLOCAL</h2>
+            <div class="w-24 h-1 bg-forest mx-auto mb-6"></div>
+            <p class="text-gray-600 max-w-2xl mx-auto">Jelajahi produk budaya autentik yang telah dikurasi ketat oleh tim BADUYLOCAL, diproduksi langsung oleh komunitas pengrajin Baduy.</p>
+        </div>
+
+        <!-- Filter & Search -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4 fade-in-up">
+            <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2" id="filter-container">
+                <button class="filter-btn active bg-forest text-white px-4 py-1.5 text-sm rounded-full whitespace-nowrap border border-forest transition" data-filter="all">Semua Produk</button>
+                <button class="filter-btn bg-transparent text-charcoal border border-charcoal hover:bg-beige px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition" data-filter="textile">Textile Tradisional</button>
+                <button class="filter-btn bg-transparent text-charcoal border border-charcoal hover:bg-beige px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition" data-filter="craft">Kerajinan Tangan</button>
+                <button class="filter-btn bg-transparent text-charcoal border border-charcoal hover:bg-beige px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition" data-filter="herbal">Produk Herbal</button>
+            </div>
+            
+            <div class="relative w-full md:w-64">
+                <input type="text" id="search-input" placeholder="Cari produk..." class="w-full bg-white border border-gray-300 px-4 py-2 rounded-full text-sm focus:outline-none focus:border-forest pl-10">
+                <i class="fa-solid fa-search absolute left-4 top-2.5 text-gray-400"></i>
+            </div>
+        </div>
+
+        <!-- Product Grid (Populated by JS) -->
+        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Products will be injected here -->
+        </div>
+    </div>
+</section>
+
+<!-- 7. PARTNERSHIP & ECOSYSTEM -->
+<section id="partnership" class="py-24 bg-sand text-charcoal px-6">
+    <div class="max-w-5xl mx-auto text-center fade-in-up">
+        <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">Community Partnership</h2>
+        <p class="mb-12 text-lg">Kolaborasi adalah kunci. Tim BADUYLOCAL tidak sekadar menjual, melainkan bermitra. Kami turun langsung mendata, menjaga hak cipta kultural, dan memperluas ekosistem digital untuk kemandirian masyarakat adat.</p>
+        
+        <div class="bg-offwhite p-8 md:p-12 shadow-md border-t-4 border-earth flex flex-col md:flex-row items-center justify-between gap-6 relative">
+            <div class="text-center w-full md:w-1/4">
+                <div class="w-20 h-20 mx-auto bg-forest text-white rounded-full flex items-center justify-center text-3xl mb-4"><i class="fa-solid fa-users"></i></div>
+                <h4 class="font-bold font-serif text-lg text-earth">Baduy Community</h4>
+                <p class="text-xs mt-2 text-gray-500">Pewaris Pengetahuan</p>
+            </div>
+            
+            <i class="fa-solid fa-link text-3xl text-earth opacity-50 rotate-90 md:rotate-0"></i>
+            
+            <div class="text-center w-full md:w-1/4">
+                <div class="w-20 h-20 mx-auto bg-earth text-white rounded-full flex items-center justify-center text-3xl mb-4"><i class="fa-solid fa-shield-halved"></i></div>
+                <h4 class="font-bold font-serif text-lg text-forest">BADUYLOCAL</h4>
+                <p class="text-xs mt-2 text-gray-500">Kurator & Pengelola</p>
+            </div>
+
+            <i class="fa-solid fa-link text-3xl text-earth opacity-50 rotate-90 md:rotate-0"></i>
+
+            <div class="text-center w-full md:w-1/4">
+                <div class="w-20 h-20 mx-auto bg-charcoal text-white rounded-full flex items-center justify-center text-3xl mb-4"><i class="fa-solid fa-globe"></i></div>
+                <h4 class="font-bold font-serif text-lg text-charcoal">Global Consumer</h4>
+                <p class="text-xs mt-2 text-gray-500">Apresiator Budaya</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 8. IMPACT DASHBOARD -->
+<section id="impact" class="py-20 bg-forest text-white px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16 fade-in-up">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Our Social Impact</h2>
+            <div class="w-24 h-1 bg-sand mx-auto"></div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center" id="counter-section">
+            <div class="fade-in-up">
+                <div class="text-5xl font-serif font-bold text-sand mb-2"><span class="counter" data-target="50">0</span>+</div>
+                <p class="text-sm tracking-wider uppercase opacity-80">Produk Terverifikasi</p>
+            </div>
+            <div class="fade-in-up" style="transition-delay: 100ms;">
+                <div class="text-5xl font-serif font-bold text-sand mb-2"><span class="counter" data-target="20">0</span>+</div>
+                <p class="text-sm tracking-wider uppercase opacity-80">Mitra Pengrajin</p>
+            </div>
+            <div class="fade-in-up" style="transition-delay: 200ms;">
+                <div class="text-5xl font-serif font-bold text-sand mb-2"><span class="counter" data-target="500">0</span>+</div>
+                <p class="text-sm tracking-wider uppercase opacity-80">Produk Tersalurkan</p>
+            </div>
+            <div class="fade-in-up" style="transition-delay: 300ms;">
+                <div class="text-5xl font-serif font-bold text-sand mb-2"><span class="counter" data-target="1000">0</span>+</div>
+                <p class="text-sm tracking-wider uppercase opacity-80">Pengunjung Digital</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 9. CHALLENGE & SOLUTION -->
+<section class="py-24 bg-offwhite px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-0 shadow-lg fade-in-up">
+            <!-- Tantangan -->
+            <div class="bg-beige p-10 md:p-16">
+                <h3 class="text-2xl font-serif font-bold text-charcoal mb-6 border-b border-earth/30 pb-4">Tantangan Lapangan</h3>
+                <ul class="space-y-6">
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-triangle-exclamation text-earth mt-1 mr-4"></i>
+                        <div>
+                            <strong class="block text-gray-800">Keterbatasan Akses Digital</strong>
+                            <p class="text-sm text-gray-600 mt-1">Pengrajin kesulitan menjangkau pasar luas secara online.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-triangle-exclamation text-earth mt-1 mr-4"></i>
+                        <div>
+                            <strong class="block text-gray-800">Distribusi & Logistik</strong>
+                            <p class="text-sm text-gray-600 mt-1">Kendala pengiriman dari pedalaman menuju konsumen.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-triangle-exclamation text-earth mt-1 mr-4"></i>
+                        <div>
+                            <strong class="block text-gray-800">Konsistensi Harga & Stok</strong>
+                            <p class="text-sm text-gray-600 mt-1">Eksploitasi harga oleh tengkulak dan fluktuasi produksi.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- Solusi -->
+            <div class="bg-earth p-10 md:p-16 text-white">
+                <h3 class="text-2xl font-serif font-bold text-sand mb-6 border-b border-sand/30 pb-4">Solusi BADUYLOCAL</h3>
+                <ul class="space-y-6">
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check-circle text-sand mt-1 mr-4"></i>
+                        <div>
+                            <strong class="block text-offwhite">Pendampingan & Platform Integrasi</strong>
+                            <p class="text-sm text-white/70 mt-1">Katalog digital tersentralisasi tanpa membebani pengrajin teknis IT.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check-circle text-sand mt-1 mr-4"></i>
+                        <div>
+                            <strong class="block text-offwhite">Hub Pengiriman Tersentral</strong>
+                            <p class="text-sm text-white/70 mt-1">Tim kami mengelola penjemputan barang dan distribusi profesional.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check-circle text-sand mt-1 mr-4"></i>
+                        <div>
+                            <strong class="block text-offwhite">Sistem Kurasi & Standarisasi</strong>
+                            <p class="text-sm text-white/70 mt-1">Harga adil (Fair Trade) untuk pengrajin dengan kualitas terjamin untuk pembeli.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 10. FOOTER -->
+<footer class="bg-charcoal text-offwhite py-16 px-6 border-t border-earth/20">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div class="md:col-span-2">
+            <h2 class="text-3xl font-serif font-bold text-sand mb-2"><i class="fa-solid fa-leaf text-forest"></i> BADUYLOCAL</h2>
+            <p class="italic text-gray-400 mb-6 font-serif">"Technology meets Tradition"</p>
+            <p class="text-sm text-gray-400 max-w-sm">Sebuah dedikasi untuk menjembatani kearifan lokal masyarakat adat Baduy dengan peluang ekonomi global melalui etika digital dan kurasi budaya.</p>
+        </div>
+        
+        <div>
+            <h4 class="font-bold mb-4 border-b border-gray-700 pb-2 text-sand">Ecosystem</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+                <li><a href="#about" class="hover:text-white transition">About Platform</a></li>
+                <li><a href="#catalog" class="hover:text-white transition">Curated Products</a></li>
+                <li><a href="#how-it-works" class="hover:text-white transition">Distribution Flow</a></li>
+                <li><a href="#partnership" class="hover:text-white transition">Community Partners</a></li>
+            </ul>
+        </div>
+        
+        <div>
+            <h4 class="font-bold mb-4 border-b border-gray-700 pb-2 text-sand">Connect</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+                <li><a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram mr-2 w-4"></i> Instagram</a></li>
+                <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-envelope mr-2 w-4"></i> Collaboration</a></li>
+                <li><a href="#" class="hover:text-white transition"><i class="fa-brands fa-whatsapp mr-2 w-4"></i> Partnership Support</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto mt-12 pt-6 border-t border-gray-700 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
+        <p>&copy; 2026 BADUYLOCAL Digital Enterprise. Hak Cipta Dilindungi.</p>
+        <p class="mt-2 md:mt-0">Dibuat dengan rasa hormat untuk Alam dan Tradisi.</p>
+    </div>
+</footer>
+
+<!-- 6. PRODUCT STORY PAGE (MODAL) -->
+<div id="product-modal" class="fixed inset-0 z-[60] bg-charcoal/95 backdrop-blur-sm items-center justify-center p-4 md:p-10 hidden">
+    <div class="bg-offwhite w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-none shadow-2xl relative flex flex-col md:flex-row border-4 border-earth/20">
+        <!-- Close button -->
+        <button id="close-modal" class="absolute top-4 right-4 z-10 w-10 h-10 bg-forest text-white flex items-center justify-center hover:bg-earth transition">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        
+        <!-- Image Section -->
+        <div class="w-full md:w-2/5 relative h-64 md:h-auto">
+            <img id="modal-img" src="" alt="Product" class="absolute inset-0 w-full h-full object-cover">
+        </div>
+        
+        <!-- Story Section -->
+        <div class="w-full md:w-3/5 p-8 md:p-12 flex flex-col justify-center">
+            <span id="modal-category" class="text-forest text-xs font-bold tracking-widest uppercase mb-2">Category</span>
+            <h2 id="modal-title" class="text-3xl md:text-4xl font-serif font-bold text-charcoal mb-2">Product Name</h2>
+            <div class="flex items-center text-xs text-earth mb-6 bg-sand/20 inline-block px-3 py-1 border border-sand">
+                <i class="fa-solid fa-check-circle mr-1"></i> Verified BADUYLOCAL Product
+            </div>
+            
+            <div class="museum-divider !my-4"></div>
+            
+            <div class="space-y-4 mb-8">
+                <div>
+                    <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wide">Diproduksi Oleh</h4>
+                    <p class="text-charcoal font-medium">Komunitas Pengrajin Baduy</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wide">Cerita & Filosofi</h4>
+                    <p id="modal-story" class="text-gray-700 leading-relaxed text-sm italic font-serif">Story here...</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wide">Proses Pembuatan</h4>
+                    <p id="modal-process" class="text-gray-700 leading-relaxed text-sm">Process here...</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between mt-auto pt-6 border-t border-gray-200">
+                <div>
+                    <span class="block text-xs text-gray-500 mb-1">Dukungan Ekonomi</span>
+                    <span id="modal-price" class="text-2xl font-bold text-earth">Rp 0</span>
+                </div>
+                <button class="bg-forest hover:bg-earth text-white px-6 py-3 transition shadow-md font-medium text-sm">Dukung & Pesan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Data Produk (Mock Database - JSON Object)
+    const products = [
+        {
+            id: 1,
+            title: "Tenun Suat Samata",
+            category: "textile",
+            categoryLabel: "Traditional Textile",
+            price: "Rp 350.000",
+            image: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=1974&auto=format&fit=crop", // placeholder kain
+            story: "Kain tenun ini dirajut menggunakan benang kapas alami dengan alat tenun gedogan kayu. Motif Suat melambangkan garis lurus kehidupan masyarakat Baduy yang konsisten pada ajaran nenek moyang.",
+            process: "Membutuhkan waktu 2-3 minggu pemgerjaan. Pewarnaan menggunakan ekstrak dedaunan dan akar-akaran hutan."
+        },
+        {
+            id: 2,
+            title: "Tas Koja (Anyaman Kulit Kayu)",
+            category: "craft",
+            categoryLabel: "Kerajinan Tangan",
+            price: "Rp 150.000",
+            image: "https://images.unsplash.com/photo-1628151015968-3a4429e9ef04?q=80&w=2072&auto=format&fit=crop", // placeholder anyaman
+            story: "Tas ikonik suku Baduy yang merepresentasikan kesederhanaan dan keterikatan dengan alam. Digunakan secara turun-temurun untuk membawa perbekalan saat ladang.",
+            process: "Dibuat dari rajutan kulit kayu teureup yang sangat kuat, dipintal manual oleh tangan pengrajin tanpa bantuan mesin modern."
+        },
+        {
+            id: 3,
+            title: "Madu Hutan Liar Odeng",
+            category: "herbal",
+            categoryLabel: "Produk Herbal",
+            price: "Rp 200.000",
+            image: "https://images.unsplash.com/photo-1587049352847-81a56d773c1c?q=80&w=2000&auto=format&fit=crop", // placeholder madu
+            story: "Madu asli dari lebah hutan liar (Odeng) yang bersarang di pohon-pohon tinggi pedalaman hutan Baduy. Panen dilakukan dengan ritual khusus memohon izin pada alam.",
+            process: "Dipanen secara lestari, hanya mengambil madu matang tanpa merusak sarang atau membunuh koloni lebah."
+        },
+        {
+            id: 4,
+            title: "Ikat Kepala Lomar",
+            category: "textile",
+            categoryLabel: "Traditional Textile",
+            price: "Rp 85.000",
+            image: "https://images.unsplash.com/photo-1584031644485-64906b3a3ea7?q=80&w=1974&auto=format&fit=crop", 
+            story: "Ikat kepala motif batik khas Baduy Luar (warna biru/hitam). Simbol kehormatan dan penanda identitas kultural yang dipakai dalam keseharian maupun upacara adat.",
+            process: "Kain katun dicap dan ditenun secara tradisional dengan pewarnaan yang ramah lingkungan."
+        },
+        {
+            id: 5,
+            title: "Gelas Bambu Tradisional",
+            category: "craft",
+            categoryLabel: "Kerajinan Tangan",
+            price: "Rp 45.000",
+            image: "https://images.unsplash.com/photo-1584984277717-d2ce0c0e5a84?q=80&w=2070&auto=format&fit=crop", 
+            story: "Pengganti plastik terbaik. Masyarakat Baduy sejak dahulu menggunakan bambu untuk alat minum dan makan, mewujudkan prinsip zero-waste sebelum konsep itu dikenal dunia.",
+            process: "Dipilih dari bambu tua kualitas terbaik, dijemur, lalu dihaluskan tanpa pelapis kimia sintetis."
+        },
+        {
+            id: 6,
+            title: "Gula Aren Organik",
+            category: "herbal",
+            categoryLabel: "Produk Herbal",
+            price: "Rp 65.000",
+            image: "https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?q=80&w=2070&auto=format&fit=crop", // placeholder gula aren
+            story: "Pemanis alami dengan indeks glikemik rendah. Hasil sadapan nira pohon aren yang tumbuh liar di perbukitan tanah ulayat Baduy.",
+            process: "Nira dimasak berjam-jam menggunakan tungku kayu bakar hingga mengental, lalu dicetak menggunakan batok kelapa atau daun aren."
+        }
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        // --- Navbar Sticky & Mobile Menu ---
+        const navbar = document.getElementById('navbar');
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-forest', 'shadow-md');
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-2');
+            } else {
+                navbar.classList.remove('bg-forest', 'shadow-md');
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2');
+            }
+        });
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // --- Intersection Observer for Animations (Fade In Up) ---
+        // Moved to top so it can be accessed by renderProducts
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Stop observing once animated
+                    if(!entry.target.classList.contains('counter-trigger')) {
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // --- Render Products ---
+        const grid = document.getElementById('product-grid');
+        
+        function renderProducts(data) {
+            grid.innerHTML = '';
+            data.forEach((item, index) => {
+                const delay = (index % 3) * 100;
+                const card = `
+                    <div class="bg-white border border-gray-100 hover:shadow-xl transition-all duration-300 fade-in-up group flex flex-col h-full">
+                        <div class="relative overflow-hidden h-64">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute top-4 left-4 bg-white/90 px-3 py-1 text-xs font-bold text-forest tracking-wider">
+                                ${item.categoryLabel}
+                            </div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex items-center text-[10px] text-earth mb-3 bg-sand/30 inline-block px-2 py-1 rounded w-max">
+                                <i class="fa-solid fa-check mr-1"></i> Verified BADUYLOCAL
+                            </div>
+                            <h3 class="text-xl font-serif font-bold text-charcoal mb-1">${item.title}</h3>
+                            <p class="text-xs text-gray-500 mb-4">Oleh: Komunitas Pengrajin Baduy</p>
+                            
+                            <div class="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
+                                <span class="font-bold text-lg text-forest">${item.price}</span>
+                                <button class="text-sm border-b-2 border-earth text-earth pb-0.5 hover:text-forest hover:border-forest transition view-story-btn" data-id="${item.id}">
+                                    Lihat Cerita <i class="fa-solid fa-arrow-right ml-1 text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', card);
+            });
+
+            // Re-attach modal listeners to new buttons
+            attachModalListeners();
+            // Trigger intersection observer for new elements
+            document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+        }
+
+        renderProducts(products);
+
+        // --- Product Filtering & Searching ---
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('search-input');
+
+        function applyFilters() {
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const searchTerm = searchInput.value.toLowerCase();
+
+            const filtered = products.filter(p => {
+                const matchCategory = activeFilter === 'all' || p.category === activeFilter;
+                const matchSearch = p.title.toLowerCase().includes(searchTerm) || p.categoryLabel.toLowerCase().includes(searchTerm);
+                return matchCategory && matchSearch;
+            });
+            renderProducts(filtered);
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-forest', 'text-white');
+                    b.classList.add('bg-transparent', 'text-charcoal');
+                });
+                e.target.classList.add('active', 'bg-forest', 'text-white');
+                e.target.classList.remove('bg-transparent', 'text-charcoal');
+                applyFilters();
+            });
+        });
+
+        searchInput.addEventListener('input', applyFilters);
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('product-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        
+        const mImg = document.getElementById('modal-img');
+        const mCat = document.getElementById('modal-category');
+        const mTitle = document.getElementById('modal-title');
+        const mStory = document.getElementById('modal-story');
+        const mProcess = document.getElementById('modal-process');
+        const mPrice = document.getElementById('modal-price');
+
+        function attachModalListeners() {
+            document.querySelectorAll('.view-story-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.closest('button').dataset.id);
+                    const prod = products.find(p => p.id === id);
+                    
+                    if(prod) {
+                        mImg.src = prod.image;
+                        mCat.textContent = prod.categoryLabel;
+                        mTitle.textContent = prod.title;
+                        mStory.textContent = `"${prod.story}"`;
+                        mProcess.textContent = prod.process;
+                        mPrice.textContent = prod.price;
+                        
+                        modal.classList.remove('hidden');
+                        // tiny delay to allow display block to apply before opacity transition
+                        setTimeout(() => modal.classList.add('show'), 10);
+                        document.body.style.overflow = 'hidden'; // prevent background scrolling
+                    }
+                });
+            });
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+            document.body.style.overflow = 'auto';
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeModal(); // close on backdrop click
+        });
+
+        // Initial observation for elements already in the HTML
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+
+        // --- Counter Animation ---
+        const counters = document.querySelectorAll('.counter');
+        const impactSection = document.getElementById('impact');
+        let counted = false;
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            const entry = entries[0];
+            if (entry.isIntersecting && !counted) {
+                counted = true;
+                counters.forEach(counter => {
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        
+                        // Lower inc for slower count, higher for faster
+                        const inc = target / 50; 
+
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + inc);
+                            setTimeout(updateCount, 40);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                });
+            }
+        }, { threshold: 0.5 });
+
+        counterObserver.observe(impactSection);
+    });
+</script>
+</body>
+</html>
